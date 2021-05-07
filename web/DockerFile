@@ -10,4 +10,5 @@ EXPOSE 5000
 
 COPY . .
 
+CMD ["pip", "freeze", ">", "re.txt"]
 CMD [ "python3", "-m" , "flask", "run"]
