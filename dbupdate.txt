@@ -1,0 +1,4 @@
+table barang :
+    - rating_count (add)
+    - gambar (add)
+    - link (remove)
