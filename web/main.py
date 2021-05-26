@@ -3,7 +3,6 @@ import time
 import redis
 from flask import Flask, render_template, send_file
 
-from controller import database_connector
 from controller import service_ecommerce 
 
 app = Flask(__name__, static_url_path='/static')
@@ -15,7 +14,8 @@ def hello():
 
 @app.route('/api/search/<string:keyword>',methods=['GET'])
 def searchproduct(keyword):
-    items = shopee.ShopeeScraper().search(keyword)
+    ecommerce = service_ecommerce.ServiceEcommerce()
+    items = ecommerce.getitems(keyword)
     return items
 
 @app.route('/api/getimage/<string:imagestring>', methods = ['GET'])

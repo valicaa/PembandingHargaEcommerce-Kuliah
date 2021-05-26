@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+
+    selenium:
+        container_name: seleniumchrome
+        image: selenium/standalone-chrome
+        ports: 
+            - 4445:4444
+        restart: always
+        networks: 
+            - app-network
+
     web:
         depends_on: 
             - db

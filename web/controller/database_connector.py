@@ -37,6 +37,17 @@ class Database():
             response = "Error while connecting to MySQL" + str(e)
         return json.dumps(response)
 
+    def select(self,query):
+        try:
+            self.__connect()
+            cursor = self.__connection.cursor()
+            cursor.execute(query)
+            response = cursor.fetchall()
+            self.__close(self.__connection)
+        except Error as e:
+            response = "Error while connecting to MySQL" + str(e)
+        return json.dumps(response)   
+
 # def run():
 #     try:
 #         connection = mysql.connector.connect(host='db', database='ecommerance', user='manpro', password='manpro', port='3306', auth_plugin= 'mysql_native_password')
