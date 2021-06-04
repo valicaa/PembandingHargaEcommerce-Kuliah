@@ -29,7 +29,7 @@ services:
             - app-network
 
     db:
-        image : mysql
+        image : mysql:8.0
         volumes: 
             - ./database:/var/lib/mysql
         environment: 

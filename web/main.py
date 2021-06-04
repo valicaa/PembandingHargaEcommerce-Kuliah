@@ -1,3 +1,4 @@
+import json
 from flask import Flask, send_file, jsonify, request
 
 from controller import shopee
@@ -18,18 +19,26 @@ def searchproduct(keyword):
     items.append(items_tokopedia)
     return jsonify(items)
 
-@app.route('/api/getimage/shopee/<string:imageurl>',methods=['GET'])
-def getimageshopee(imageurl):
+@app.route('/api/shopee/getimage/',methods=['GET'])
+def getimageshopee():
+    data = request.get_json()
     shopee_handler = shopee.ShopeeScraper()
-    shopee_handler.getimage(imageurl)
-    return send_file("./static/"+imageurl+".png", mimetype='image/gif')
+    shopee_handler.getimage(data['url'])
+    return send_file("./static/"+data['url'].replace('https://cf.shopee.co.id/file/','')+".png", mimetype='image/gif')
 
-@app.route('/api/getimage/tokopedia', methods=['GET'])
+@app.route('/api/tokopedia/getimage', methods=['GET'])
 def getimagetokopedia():
     data = request.get_json()
     tokopedia_handler = tokopedia.TokopediaScraper()
     tokopedia_handler.getimage(data['url'],data['url'].replace(":","").replace("/",""))
     return send_file("./static/"+data['url'].replace(":","").replace("/","")+".png", mimetype='image/gif')
+
+@app.route('/api/shopee/getproductdetail/<string:itemid>/<string:shopid>',methods=['GET'])
+def getproductshopee(itemid,shopid):
+    shopee_handler = shopee.ShopeeScraper()
+    response = shopee_handler.getproductdetail(itemid,shopid)
+    return jsonify(response)
+
 
 # @app.route('/api/getimage/<string:imagestring>', methods = ['GET'])
 # def getimage(imagestring):

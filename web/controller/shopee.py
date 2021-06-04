@@ -49,7 +49,7 @@ class ShopeeScraper():
             'discount' : str(discount),
             'price_before_discount' : str(html['items'][0]['item_basic']['price_before_discount'])[:-5],
             #'stock' : html['items'][0]['item_basic']['stock'],
-            'image' : html['items'][0]['item_basic']['image'],
+            'image' : 'https://cf.shopee.co.id/file/' + html['items'][0]['item_basic']['image'],
             'rating' : html['items'][0]['item_basic']['item_rating']['rating_star'],
             'rating_count' : html['items'][0]['item_basic']['item_rating']['rating_count'][0],
             'link' : "https://shopee.co.id/" + str(html['items'][0]['item_basic']['name']).replace(" ","-") + "-i." + str(html['items'][0]['item_basic']['shopid']) + '.' + str(html['items'][0]['item_basic']['itemid']),
@@ -78,7 +78,7 @@ class ShopeeScraper():
                 'discount' : str(discount),
                 'price_before_discount' : str(html['items'][i]['item_basic']['price_before_discount'])[:-5],
                 #'stock' : html['items'][i]['item_basic']['stock'],
-                'image' : html['items'][i]['item_basic']['image'],
+                'image' : 'https://cf.shopee.co.id/file/' + html['items'][i]['item_basic']['image'],
                 'rating' : html['items'][i]['item_basic']['item_rating']['rating_star'],
                 'rating_count' : html['items'][i]['item_basic']['item_rating']['rating_count'][0],
                 'link' : "https://shopee.co.id/" + str(html['items'][i]['item_basic']['name']).replace(" ","-") + "-i." + str(html['items'][i]['item_basic']['shopid']) + '.' + str(html['items'][i]['item_basic']['itemid']),
@@ -98,8 +98,9 @@ class ShopeeScraper():
     def __updateurl__(self):
         self.url="https://shopee.co.id/api/v4/search/search_items?by=relevancy&keyword="+self.keyword+"&limit=50&newest=0&order=desc&page_type=search&version=2"
 
-    def getimage(self, imagestring):
-        url = "https://cf.shopee.co.id/file/" + imagestring
+    def getimage(self, url):
+        #url = "https://cf.shopee.co.id/file/" + imagestring
+        imagestring = url.replace('https://cf.shopee.co.id/file/','')
         #response = requests.get(url, headers = self.headers)
         return urllib.request.urlretrieve(url, "static/"+imagestring+".png")
         # try:
@@ -119,5 +120,5 @@ class ShopeeScraper():
         response = requests.get(url, headers = self.headers).json()
         return response
 
-test = ShopeeScraper()
-print(test.getproductdetail(7383182794,46956772))
+# test = ShopeeScraper()
+# print(test.getproductdetail(7383182794,46956772))
