@@ -47,12 +47,3 @@ class Database():
         except Error as e:
             response = "Error while connecting to MySQL" + str(e)
         return json.dumps(response)   
-
-# def run():
-#     try:
-#         connection = mysql.connector.connect(host='db', database='ecommerance', user='manpro', password='manpro', port='3306', auth_plugin= 'mysql_native_password')
-#         response = 'success'
-#         connection.close()
-#     except Error as e:
-#         response = "Error while connecting to MySQL" + str(e)
-#     return response

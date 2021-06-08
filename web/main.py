@@ -4,8 +4,6 @@ from flask import Flask, send_file, jsonify, request
 from controller import shopee
 from controller import tokopedia
 
-import urllib.request
-
 app = Flask(__name__, static_url_path='/static')
 
 @app.route('/api/search/<string:keyword>',methods=['GET'])
@@ -19,7 +17,7 @@ def searchproduct(keyword):
     items.append(items_tokopedia)
     return jsonify(items)
 
-@app.route('/api/shopee/getimage/',methods=['GET'])
+@app.route('/api/shopee/getimage',methods=['GET'])
 def getimageshopee():
     data = request.get_json()
     shopee_handler = shopee.ShopeeScraper()
@@ -33,17 +31,10 @@ def getimagetokopedia():
     tokopedia_handler.getimage(data['url'],data['url'].replace(":","").replace("/",""))
     return send_file("./static/"+data['url'].replace(":","").replace("/","")+".png", mimetype='image/gif')
 
-@app.route('/api/shopee/getproductdetail/<string:itemid>/<string:shopid>',methods=['GET'])
-def getproductshopee(itemid,shopid):
+@app.route('/api/getflashsale', methods=['GET'])
+def getflashsale():
     shopee_handler = shopee.ShopeeScraper()
-    response = shopee_handler.getproductdetail(itemid,shopid)
-    return jsonify(response)
-
-
-# @app.route('/api/getimage/<string:imagestring>', methods = ['GET'])
-# def getimage(imagestring):
-#     success = shopee.ShopeeScraper().getimage(imagestring)
-#     return send_file("./static/"+imagestring+".png", mimetype='image/gif')
+    return jsonify(shopee_handler.getflashsale())
 
 if __name__ == '__main__':
     app.run()

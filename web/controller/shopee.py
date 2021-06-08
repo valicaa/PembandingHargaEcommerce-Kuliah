@@ -2,6 +2,8 @@ import json
 import requests
 from io import BytesIO
 import urllib.request
+from datetime import datetime, timezone, timedelta
+import pytz
 
 class ShopeeScraper():
     def __init__(self):
@@ -120,5 +122,49 @@ class ShopeeScraper():
         response = requests.get(url, headers = self.headers).json()
         return response
 
-# test = ShopeeScraper()
-# print(test.getproductdetail(7383182794,46956772))
+    def getflashsale(self):
+        url = "https://shopee.co.id/api/v2/flash_sale/flash_sale_get_items"
+        response = requests.get(url, headers = self.headers).json()
+        data = []
+        for i in response['data']['items']:
+            name = str(i['name']).replace(" ","-")
+            shopid = str(i['shopid'])
+            itemid = str(i['itemid'])
+            url = "https://shopee.co.id/"+name+"-i."+shopid+"." + itemid
+            promoname = str(i['promo_name'])
+            pricebeforediscount = str(i['price_before_discount'])[:-5]
+            price = str(i['price'])[:-5]
+            discount = str(i['discount'])
+            image = str(i['image'])
+            promoimages = i['promo_images']
+            flashsalestock = str(i['flash_sale_stock'])
+            tz = timezone(timedelta(hours=7))
+            endtime = datetime.fromtimestamp(int(i['end_time']),tz).strftime('%Y-%m-%d %H:%M:%S')
+            starttime = datetime.fromtimestamp(int(i['start_time']),tz).strftime('%Y-%m-%d %H:%M:%S')
+            item = {
+                'url': url,
+                'itemid': itemid,
+                'shopid': shopid,
+                'promo_name': promoname,
+                'price_before_discount': pricebeforediscount,
+                'price': price,
+                'discount': discount,
+                'image': image,
+                'promo_images':promoimages,
+                'flash_sale_stock': flashsalestock,
+                'end_time': endtime,
+                'start_time': starttime
+            }
+            i['url'] = url
+            i['start_time'] = starttime
+            i['end_time'] = endtime
+            i['image'] = 'https://cf.shopee.co.id/file/' + i['image']
+            for j in range(len(i['promo_images'])):
+                i['promo_images'][j] = 'https://cf.shopee.co.id/file/' + i['promo_images'][j]
+            i['price'] = int(str(i['price'])[:-5])
+            i['price_before_discount'] = int(str(i['price_before_discount'])[:-5])
+            data.append(i)
+        return data
+
+test = ShopeeScraper()
+print(test.getflashsale())
