@@ -3,6 +3,7 @@ from flask import Flask, send_file, jsonify, request
 
 from controller import shopee
 from controller import tokopedia
+from controller import database_connector
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -35,6 +36,18 @@ def getimagetokopedia():
 def getflashsale():
     shopee_handler = shopee.ShopeeScraper()
     return jsonify(shopee_handler.getflashsale())
+
+@app.route('/api/updatehistory',methods=['POST'])
+def updatehistory():
+    data = request.get_json()
+    db_item_handler = database_connector.ItemHandler()
+    datanew, response1 = db_item_handler.setitem(data)
+    db_history_handler = database_connector.HistoryHandler()
+    response2 = db_history_handler.sethistory(datanew)
+    response = []
+    response.append(response1)
+    response.append(response2)
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run()

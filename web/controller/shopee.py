@@ -72,7 +72,7 @@ class ShopeeScraper():
             if str(html['items'][i]['item_basic']['price_before_discount'])[:-5] != "" :
                 discount = 100 - ((int(str(html['items'][i]['item_basic']['price'])[:-5])/int(str(html['items'][i]['item_basic']['price_before_discount'])[:-5]))*100)
             updateitem = {
-                'names' : html['items'][i]['item_basic']['name'],
+                'name' : html['items'][i]['item_basic']['name'],
                 'itemid' : html['items'][i]['item_basic']['itemid'],
                 'shopid' : html['items'][i]['item_basic']['shopid'],
                 #'categoryid' : html['items'][i]['item_basic']['catid'],
@@ -142,7 +142,7 @@ class ShopeeScraper():
             endtime = datetime.fromtimestamp(int(i['end_time']),tz).strftime('%Y-%m-%d %H:%M:%S')
             starttime = datetime.fromtimestamp(int(i['start_time']),tz).strftime('%Y-%m-%d %H:%M:%S')
             item = {
-                'url': url,
+                'link': url,
                 'itemid': itemid,
                 'shopid': shopid,
                 'promo_name': promoname,
@@ -153,7 +153,8 @@ class ShopeeScraper():
                 'promo_images':promoimages,
                 'flash_sale_stock': flashsalestock,
                 'end_time': endtime,
-                'start_time': starttime
+                'start_time': starttime,
+                'name' : name
             }
             i['url'] = url
             i['start_time'] = starttime

@@ -98,9 +98,10 @@ class TokopediaScraper():
 				realprice = price
 
 			items.append({
-				'names' : str(name),
+				'name' : str(name),
 				#'categoryid' : str(-2),
 				'price' : str(realprice),
+				'price_before_discount': str(price),
 				'discount' : str(discount),
 				'image' : str(image['src']),
 				'rating' : str(rating),
